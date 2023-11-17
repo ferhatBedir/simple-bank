@@ -1,0 +1,28 @@
+version: "3.9"
+
+services:
+  database:
+    image: postgres:16.1
+    container_name: simple-bank-db
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: simple_bank
+    volumes:
+      - data-volume:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "postgres", "-U", "root" ]
+      timeout: 45s
+      interval: 10s
+      retries: 10
+    restart: always
+    ports:
+      - "5432:5432"
+    networks:
+      - simple-bank-network
+
+volumes:
+  data-volume:
+
+networks:
+  simple-bank-network:
