@@ -10,12 +10,12 @@ import (
 
 func createRandomEntry(t *testing.T) Entry {
 	account := createRandomAccount(t)
-	arg := CreateEntriesParams{
+	arg := CreateEntryParams{
 		AccountID: account.ID,
 		Amount:    account.Balance / 2,
 	}
 
-	entry, err := testQueries.CreateEntries(context.Background(), arg)
+	entry, err := testQueries.CreateEntry(context.Background(), arg)
 	require.NoError(t, err)
 	require.NotEmpty(t, entry)
 
@@ -33,7 +33,7 @@ func TestCreateEntry(t *testing.T) {
 
 func TestGetEntries(t *testing.T) {
 	entry := createRandomEntry(t)
-	foundEntry, err := testQueries.GetEntries(context.Background(), entry.ID)
+	foundEntry, err := testQueries.GetEntry(context.Background(), entry.ID)
 	require.NoError(t, err)
 	require.NotEmpty(t, foundEntry)
 
@@ -45,11 +45,11 @@ func TestGetEntries(t *testing.T) {
 
 func TestUpdateEntry(t *testing.T) {
 	entry := createRandomEntry(t)
-	arg := UpdateEntriesParams{
+	arg := UpdateEntryParams{
 		ID:     entry.ID,
 		Amount: entry.Amount / 2,
 	}
-	updatedEntry, err := testQueries.UpdateEntries(context.Background(), arg)
+	updatedEntry, err := testQueries.UpdateEntry(context.Background(), arg)
 	require.NoError(t, err)
 	require.NotEmpty(t, updatedEntry)
 
@@ -61,10 +61,10 @@ func TestUpdateEntry(t *testing.T) {
 
 func TestDeleteEntry(t *testing.T) {
 	entry := createRandomEntry(t)
-	err := testQueries.DeleteEntries(context.Background(), entry.ID)
+	err := testQueries.DeleteEntry(context.Background(), entry.ID)
 	require.NoError(t, err)
 
-	notFoundEntry, err := testQueries.GetEntries(context.Background(), entry.ID)
+	notFoundEntry, err := testQueries.GetEntry(context.Background(), entry.ID)
 	require.Error(t, err)
 	require.EqualError(t, err, sql.ErrNoRows.Error())
 	require.Empty(t, notFoundEntry)
